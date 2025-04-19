@@ -1,77 +1,253 @@
+/* TaskForm.css */
 .task-form-container {
-  max-width: 400px;
-  margin: 1rem auto;
-  padding: 1rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 1.5rem auto;
+  transition: all 0.3s ease;
 }
 
 .task-form {
-  background-color: #fff;
-  padding: 1.2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .form-title {
   text-align: center;
-  margin-bottom: 1rem;
-  color: #333;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+  font-size: 1.5rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.form-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 2px;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
 }
 
-label {
-  margin-bottom: 0.3rem;
-  font-weight: 500;
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.form-group label::after {
+  content: "*";
+  color: #ef4444;
+  margin-left: 4px;
+  font-size: 1.2rem;
+}
+
+.form-group label:not([for="description"])::after {
+  content: "*";
+  color: #ef4444;
+  margin-left: 4px;
+  font-size: 1.2rem;
+}
+
+.form-group label[for="description"]::after {
+  content: "";
 }
 
 input,
 textarea,
 select {
-  padding: 0.5rem;
+  padding: 0.8rem 1rem;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: #f8fafc;
+  color: #1e293b;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #6366f1;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8;
 }
 
 textarea {
   resize: vertical;
-  min-height: 60px;
+  min-height: 100px;
+  line-height: 1.5;
+}
+
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2rem;
+  padding-right: 2.5rem;
+}
+
+select:invalid {
+  color: #94a3b8;
 }
 
 .form-actions {
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
 .cancel-btn,
 .submit-btn {
   flex: 1;
-  margin: 0 0.25rem;
-  padding: 0.5rem;
+  padding: 0.8rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .cancel-btn {
-  background-color: #f44336;
-  color: white;
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+}
+
+.cancel-btn:hover {
+  background-color: #e2e8f0;
+  color: #475569;
 }
 
 .submit-btn {
-  background-color: #4caf50;
+  background: linear-gradient(to right, #10b981, #059669);
   color: white;
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.25);
+}
+
+.submit-btn:hover {
+  background: linear-gradient(to right, #059669, #047857);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  transform: translateY(-2px);
+}
+
+.submit-btn:active {
+  transform: translateY(1px);
 }
 
 .toggle-form-btn {
-  background-color: #3f51b5;
+  background: linear-gradient(to right, #6366f1, #8b5cf6);
   color: white;
-  padding: 0.6rem 1rem;
+  padding: 1rem 1.5rem;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   width: 100%;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(99, 102, 241, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.toggle-form-btn:hover {
+  background: linear-gradient(to right, #4f46e5, #7c3aed);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(99, 102, 241, 0.3);
+}
+
+.toggle-form-btn:active {
+  transform: translateY(1px);
+}
+
+.toggle-form-btn::before {
+  content: "+";
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-right: 0.5rem;
+  line-height: 0.8;
+}
+
+@media (max-width: 640px) {
+  .task-form {
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .submit-btn {
+    width: 100%;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px; /* Prevents iOS zoom on input focus */
+  }
+}
+
+/* Form validation visual feedback */
+input:invalid:not(:placeholder-shown),
+select:invalid:not(:placeholder-shown) {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+input:valid:not(:placeholder-shown),
+select:valid:not(:placeholder-shown) {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+/* Form field focus states */
+.form-group:focus-within label {
+  color: #6366f1;
 }

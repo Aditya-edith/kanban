@@ -1,141 +1,153 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
-import "./TaskForm.css"; // Keep your custom styles
+import "./TaskForm.css";
 
 const socket = io("http://localhost:3001");
 
-const TaskForm = () => {
-  const [formVisible, setFormVisible] = useState(true);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState("");
-  const [category, setCategory] = useState("");
-  const [status, setStatus] = useState("todo");
+const TaskForm = ({ task, onSubmit, onCancel }) => {
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    priority: "",
+    category: "",
+    status: "todo",
+  });
+
+  // If editing an existing task, populate form with task data
+  useEffect(() => {
+    if (task) {
+      setFormData({
+        title: task.title || "",
+        description: task.description || "",
+        priority: task.priority || "",
+        category: task.category || "",
+        status: task.status || "todo",
+      });
+    }
+  }, [task]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title || !priority || !category) {
+    if (!formData.title || !formData.priority || !formData.category) {
       alert("Please fill in all required fields (Title, Priority, Category)");
       return;
     }
 
-    socket.emit("task:create", {
-      title,
-      description,
-      priority,
-      category,
-      status,
-    });
+    const taskData = task ? { ...task, ...formData } : { ...formData };
+    onSubmit(taskData);
 
-    resetForm();
-    setFormVisible(false); // Hide form after submission
-  };
-
-  const resetForm = () => {
-    setTitle("");
-    setDescription("");
-    setPriority("");
-    setCategory("");
-    setStatus("todo");
+    // Reset form after submission
+    if (!task) {
+      setFormData({
+        title: "",
+        description: "",
+        priority: "",
+        category: "",
+        status: "todo",
+      });
+    }
   };
 
   return (
-    <div className="task-form-container">
-      {formVisible ? (
-        <div className="task-form">
-          <h2 className="form-title">Add New Task</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="title">Task Title *</label>
-              <input
-                id="title"
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter task title"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Enter task description"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="priority">Priority *</label>
-              <select
-                id="priority"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-                required
-              >
-                <option value="">Select Priority</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="category">Category *</label>
-              <select
-                id="category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                required
-              >
-                <option value="">Select Category</option>
-                <option value="bug">Bug</option>
-                <option value="feature">Feature</option>
-                <option value="task">Task</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="status">Status</label>
-              <select
-                id="status"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="todo">To Do</option>
-                <option value="inProgress">In Progress</option>
-                <option value="done">Done</option>
-              </select>
-            </div>
-
-            <div className="form-actions">
-              <button
-                type="button"
-                className="cancel-btn"
-                onClick={() => {
-                  resetForm();
-                  setFormVisible(false); // Hide form
-                }}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="submit-btn">
-                Add Task
-              </button>
-            </div>
-          </form>
+    <div className="task-form">
+      <h2 className="form-title">{task ? "Edit Task" : "Add New Task"}</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="title">Task Title</label>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="Enter task title"
+            required
+          />
         </div>
-      ) : (
-        <button
-          onClick={() => setFormVisible(true)}
-          className="toggle-form-btn"
-        >
-          + Add New Task
-        </button>
-      )}
+
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Enter task description (optional)"
+            rows="4"
+          />
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="priority">Priority</label>
+            <select
+              id="priority"
+              name="priority"
+              value={formData.priority}
+              onChange={handleChange}
+              required
+            >
+              <option value="" disabled>
+                Select Priority
+              </option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+            >
+              <option value="" disabled>
+                Select Category
+              </option>
+              <option value="Bug">Bug</option>
+              <option value="Feature">Feature</option>
+              <option value="Enhancement">Enhancement</option>
+              <option value="Task">Task</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="status">Status</label>
+          <select
+            id="status"
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+          >
+            <option value="todo">To Do</option>
+            <option value="inProgress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+
+        <div className="form-actions">
+          <button type="button" className="cancel-btn" onClick={onCancel}>
+            Cancel
+          </button>
+          <button type="submit" className="submit-btn">
+            {task ? "Update Task" : "Add Task"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
