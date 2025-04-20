@@ -6,7 +6,7 @@ export default defineConfig({
   timeout: 20 * 1000, // Test timeout in milliseconds
   use: {
     headless: false, // Run tests in headless mode
-    baseURL: "http://localhost:3000", // Replace with your app's base URL
+    baseURL: "http://localhost:3000",
     viewport: { width: 1300, height: 720 }, // Default viewport
   },
   projects: [

@@ -28,7 +28,7 @@ ChartJS.register(
 );
 
 // WebSocket connection
-const socket = io("http://localhost:3001");
+const socket = io("https://kanban-dashboard-hoof.onrender.com");
 
 const KanbanBoard = () => {
   const [tasks, setTasks] = useState({

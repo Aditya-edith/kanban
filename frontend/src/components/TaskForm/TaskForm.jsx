@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import "./TaskForm.css";
 
-const socket = io("http://localhost:3001");
+const socket = io("https://kanban-dashboard-hoof.onrender.com");
 
 const TaskForm = ({ task, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
